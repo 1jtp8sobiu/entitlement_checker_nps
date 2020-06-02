@@ -17,7 +17,7 @@ https://store.playstation.com/kamaji/api/chihiro/00_09_000/gateway/store/v1/user
 5. 次のようにコマンドをタイプします。  
 `>python entitlement_checker_nps.py internal_entitlements.json`  
 もしくは `internal_entitlements.json` を `entitlement_checker_nps.exe` へとドラッグ&ドロップします。
-6. 'output'フォルダに 'xxx_submission_xxx.json' と 'xxx_results.tsv' が作成されたことを確認します。  
+6. 'output'フォルダに 'xxx_submission.json' と 'xxx_results.tsv' が作成されたことを確認します。  
 Note: 既に全てのコンテンツがデータベースに存在する場合はその旨が表示されます。
 7. 'xxx_results.tsv' を確認し、不足しているNoNpDrm fake licenseまたはRAP ファイルを作成します。
 8. 作成したlicenseファイルをzipファイルとして纏めて、'submission_xxx.json' と共に[投稿ページ](https://nopaystation.com/contribute/batch)から投稿してください。
