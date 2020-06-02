@@ -6,7 +6,7 @@
 このスクリプトは、主に次のような場合に役に立つかも知れません。
 - 自分のアカウント内にまだNPSに登録されていないコンテンツがあるかどうか確認したい場合。
 - アカウント内のどのコンテンツのfake licenseを作成すべきなのか分からない場合。
-- NPS投稿ページでの検証時間を最少減に抑えたい場合。
+- NPS投稿ページでの検証時間を最小限に抑えたい場合。
 
 ## 使い方
 1. [Pythonスクリプト](https://raw.githubusercontent.com/1jtp8sobiu/entitlement_checker_nps/master/entitlement_checker_nps.py) または [Windowsバイナリ](https://raw.githubusercontent.com/1jtp8sobiu/entitlement_checker_nps/master/entitlement_checker_nps.exe)をダウンロードします。
