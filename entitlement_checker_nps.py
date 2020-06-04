@@ -204,7 +204,7 @@ def main():
     print('Done.\n')
 
     if psv_data.item_count == 0 and ps3_data.item_count == 0 and psp_data.item_count == 0:
-        print('All of your items are already in the DB.\n')
+        print('All items are already in the DB.\n')
     else:
         try:
             psv_data.output()
