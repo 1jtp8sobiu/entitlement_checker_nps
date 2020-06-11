@@ -6,6 +6,8 @@ import sys
 import os
 import urllib.request
 
+extract_all = False
+
 psv = 'psv'
 ps3 = 'ps3'
 psp = 'psp'
@@ -23,33 +25,46 @@ def download_file(filename):
     urllib.request.urlretrieve(repo_url+filename, dist_dir+filename)
 
 def get_platform(platform_id, cid, package_sub_type):
-    if platform_id == 2281701376:
+    if platform_id == 2281701376: # (or platform_id == 4293918720 ?)
         platform = psv
         pkg_type = type_game_dlc
+        if not cid[7:10] == 'PCS':
+            platform = ps3
     elif platform_id == 134217728:
         platform = psv
         pkg_type = type_theme
-    elif platform_id == 2147483648 or platform_id == 2149580800:
+        if not cid[7:10] == 'PCS':
+            platform = ps3
+    elif platform_id == 2147483648 or platform_id == 2149580800 or platform_id == 2283798528 or platform_id == 2155872256:
         platform = ps3
         pkg_type = type_game_dlc
-    elif platform_id == 4161798144 or platform_id == 1880096768 or platform_id == 4027580416:
+    elif platform_id == 4161798144 or platform_id == 1880096768 or platform_id == 4027580416: # (or platform_id == 2014314496 ?)
         platform = psp
-        if cid[7:10] == 'PCS':
-            platform = psv
         pkg_type = type_game_dlc
+        if cid[7:8] == 'B':
+            platform = ps3
     else:
-        platform = psp
-        if cid[7:10] == 'PCS':
-            platform = psv
+        platform = ps3
         pkg_type = type_game_dlc
+        if cid[7:8] == 'U':
+            platform = psp
+
+    if cid[7:10] == 'PCS':
+        platform = psv
 
     if package_sub_type == 'MISC_AVATAR':
         platform = ps3
         pkg_type = type_avatar
 
-    if cid == 'UP4108-NPUB31522_00-SPECIALFREE00004' or cid == 'EP9000-PCSF00178_00-SOULENTITLEMENT1':
+     #Special CIDs
+    if cid == 'EP9000-PCSF00178_00-SOULENTITLEMENT1' or cid == 'UP1082-NPUB90491_00-SPLITSECONDDEM21':
         platform = ps3
-        pkg_type = type_game_dlc
+    elif cid == 'JP9002-NPJW90014_00-0000000000000003': # platform_id == 2014314496
+        platform = psp
+        pkg_type = type_theme
+    elif cid[20:35] == 'KAGURAPLUSTHEME':
+        platform = ps3
+        pkg_type = type_theme
 
     return platform, pkg_type
 
@@ -76,11 +91,13 @@ class PlatformData:
     def add_new_item(self, pkg, active_date, cid, name, size, drm_type, platform_id, base_game, product_id, package_sub_type, missing_pkg, missing_license, psplus):
             if self.item_count == 0:
                 csv_header = ['Item No.', 'Content Name', 'Platform', '*Missing PKG', self.csv_header_license, 'PS Plus', 'Content ID', 'Size', 'Date', 'Base Game']
-                #csv_header = ['Item No.', 'Content Name', 'Platform', '*Missing PKG', self.csv_header_license, 'PS Plus', 'Content ID', 'Size', 'Date', 'Base Game', 'titleid', 'platform_id', 'drm_type', 'package_sub_type', 'pkg']
+                if extract_all:
+                    csv_header = ['Item No.', 'Content Name', 'Platform', '*Missing PKG', self.csv_header_license, 'PS Plus', 'Content ID', 'Size', 'Date', 'Base Game', 'titleid', 'platform_id', 'product_id', 'drm_type', 'package_sub_type', 'pkg']
                 self.results.append(csv_header)
 
             newrow = [self.item_count+1, name, self.plat_name, missing_pkg, missing_license, psplus, cid, size, active_date[0:10], base_game]
-            #newrow = [self.item_count+1, name, self.plat_name, missing_pkg, missing_license, psplus, cid, size, active_date[0:10], base_game, cid[7:16], platform_id, drm_type, package_sub_type, pkg]
+            if extract_all:
+                newrow = [self.item_count+1, name, self.plat_name, missing_pkg, missing_license, psplus, cid, size, active_date[0:10], base_game, cid[7:16], platform_id, product_id, drm_type, package_sub_type, pkg]
             self.results.append(newrow)
             new_item = {'platform': self.plat_name, 'name': name, 'pkg': pkg, 'id': cid, 'size': size, 'baseGame': base_game, 'productID': product_id, 'url': ''}
             self.submission_json['items'].append(new_item)
@@ -189,9 +206,12 @@ def main():
             missing_license = 'Yes'
         else:
             missing_license = ''
-
-        if missing_pkg == '' and missing_license == '':
-            continue
+            
+        if extract_all:
+            pass
+        else:
+            if missing_pkg == '' and missing_license == '':
+                continue
 
         item_data = (pkg, active_date, cid, name, size, drm_type, platform_id, base_game, product_id, package_sub_type, missing_pkg, missing_license, psplus)
         if platform == psv:
