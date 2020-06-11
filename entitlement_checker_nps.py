@@ -56,7 +56,7 @@ def get_platform(platform_id, cid, package_sub_type):
         platform = ps3
         pkg_type = type_avatar
 
-     #Special CIDs
+    #Special CIDs
     if cid == 'EP9000-PCSF00178_00-SOULENTITLEMENT1' or cid == 'UP1082-NPUB90491_00-SPLITSECONDDEM21':
         platform = ps3
     elif cid == 'JP9002-NPJW90014_00-0000000000000003': # platform_id == 2014314496
