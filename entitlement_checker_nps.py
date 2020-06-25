@@ -118,7 +118,7 @@ class PlatformData:
             print(f'{dist_dir}{self.output_json_name:.<24s}done')
 
 def main():
-    dpath = os.path.dirname(sys.argv[0]) # Get absolute path for PyInstaller
+    dpath = os.path.dirname(os.path.abspath(sys.argv[0]))
     os.chdir(dpath)
 
     try:
