@@ -11,7 +11,7 @@ This script may be useful mainly in the following cases:
 
 ## How to use
 1. Download a [Python script](https://raw.githubusercontent.com/1jtp8sobiu/entitlement_checker_nps/master/entitlement_checker_nps.py) or [Windows binary](https://raw.githubusercontent.com/1jtp8sobiu/entitlement_checker_nps/master/entitlement_checker_nps.exe) (right click to save).
-2. Go to the [PS Store](https://store.playstation.com/) and sign in.
+2. Go to the PS Store `https://store.playstation.com/` and sign in.
 3. Wait until your profile picture is displayed and the page is completely loaded.
 4. Download the entitlement information of your PSN account from the next link (right click to save).  
 https://store.playstation.com/kamaji/api/chihiro/00_09_000/gateway/store/v1/users/me/internal_entitlements?size=10000&fields=game_meta,drm_def
@@ -46,7 +46,7 @@ Python 3.7
 
 ## 使い方
 1. [Pythonスクリプト](https://raw.githubusercontent.com/1jtp8sobiu/entitlement_checker_nps/master/entitlement_checker_nps.py) または [Windowsバイナリ](https://raw.githubusercontent.com/1jtp8sobiu/entitlement_checker_nps/master/entitlement_checker_nps.exe)をダウンロードします (右クリックして保存)。
-2. [PS Store](https://store.playstation.com/)にアクセスし、サインインします。
+2. PS Store `https://store.playstation.com/` にアクセスし、サインインします。
 3. プロフィール画像等が表示され、ページが完全に読み込まれるまで待機します。
 4. 次のページからPSNアカウントに存在するコンテンツ情報をダウンロードします (右クリックして保存)。  
 https://store.playstation.com/kamaji/api/chihiro/00_09_000/gateway/store/v1/users/me/internal_entitlements?size=10000&fields=game_meta,drm_def
