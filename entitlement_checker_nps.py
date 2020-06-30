@@ -5,8 +5,13 @@ import json
 import sys
 import os
 import urllib.request
+import argparse 
 
-extract_all = False
+parser = argparse.ArgumentParser(description='PSN Entitlement Checker for NPS')
+parser.add_argument('input_file', help='input path of your internal_entitlements.json')
+parser.add_argument('--extractall', action='store_true', help='extract all items')
+parser.add_argument('--csv', action='store_true', help='output results as csv format(default=tsv format)')
+args = parser.parse_args()
 
 psv = 'psv'
 ps3 = 'ps3'
@@ -85,19 +90,25 @@ class PlatformData:
             self.csv_header_license = '*Missing RAP'
             self.plat_name = 'PSP'
 
-        self.output_results_name = platform + '_results.tsv'
+        if args.csv:
+            self.output_results_name = platform + '_results.csv'
+        else:
+            self.output_results_name = platform + '_results.tsv'
+
         self.output_json_name = platform + '_submission.json'
 
     def add_new_item(self, pkg, active_date, cid, name, size, drm_type, platform_id, base_game, product_id, package_sub_type, missing_pkg, missing_license, psplus):
             if self.item_count == 0:
-                csv_header = ['Item No.', 'Content Name', 'Platform', '*Missing PKG', self.csv_header_license, 'PS Plus', 'Content ID', 'Size', 'Date', 'Base Game']
-                if extract_all:
+                if args.extractall:
                     csv_header = ['Item No.', 'Content Name', 'Platform', '*Missing PKG', self.csv_header_license, 'PS Plus', 'Content ID', 'Size', 'Date', 'Base Game', 'titleid', 'platform_id', 'product_id', 'drm_type', 'package_sub_type', 'pkg']
+                else:
+                    csv_header = ['Item No.', 'Content Name', 'Platform', '*Missing PKG', self.csv_header_license, 'PS Plus', 'Content ID', 'Size', 'Date', 'Base Game']
                 self.results.append(csv_header)
 
-            newrow = [self.item_count+1, name, self.plat_name, missing_pkg, missing_license, psplus, cid, size, active_date[0:10], base_game]
-            if extract_all:
+            if args.extractall:
                 newrow = [self.item_count+1, name, self.plat_name, missing_pkg, missing_license, psplus, cid, size, active_date[0:10], base_game, cid[7:16], platform_id, product_id, drm_type, package_sub_type, pkg]
+            else:
+                newrow = [self.item_count+1, name, self.plat_name, missing_pkg, missing_license, psplus, cid, size, active_date[0:10], base_game]
             self.results.append(newrow)
             new_item = {'platform': self.plat_name, 'name': name, 'pkg': pkg, 'id': cid, 'size': size, 'baseGame': base_game, 'productID': product_id, 'url': ''}
             self.submission_json['items'].append(new_item)
@@ -109,7 +120,10 @@ class PlatformData:
 
         if not self.item_count == 0:
             with open(dist_dir+self.output_results_name, 'w', encoding='utf-8', newline='') as f:
-                writer = csv.writer(f, delimiter='\t')
+                if args.csv:
+                    writer = csv.writer(f, delimiter=',')
+                else:
+                    writer = csv.writer(f, delimiter='\t')
                 writer.writerows(self.results)
             print(f'{dist_dir}{self.output_results_name:.<24s}done')
     
@@ -118,17 +132,17 @@ class PlatformData:
             print(f'{dist_dir}{self.output_json_name:.<24s}done')
 
 def main():
-    dpath = os.path.dirname(os.path.abspath(sys.argv[0]))
-    os.chdir(dpath)
-
     try:
-        with open(sys.argv[1], 'rb') as f:
+        with open(args.input_file, 'rb') as f:
             entitlement_json = json.loads(f.read())
         item_count_all = len(entitlement_json['entitlements'])
     except:
          print('Error!...Invalid json file.\n')
          input('Press Enter to exit.')
          sys.exit()
+
+    dpath = os.path.dirname(os.path.abspath(sys.argv[0]))
+    os.chdir(dpath)
 
     print('Downloading db files...')
     try:
@@ -207,7 +221,7 @@ def main():
         else:
             missing_license = ''
             
-        if extract_all:
+        if args.extractall:
             pass
         else:
             if missing_pkg == '' and missing_license == '':
