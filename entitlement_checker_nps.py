@@ -206,12 +206,11 @@ class PlatformData:
         else:
             newrow = [self.item_count+1, p['name'], self.plat_name, p['missing_pkg'], p['missing_license'], 
                       p['psplus'], p['cid'], p['size'], p['active_date'][0:10], p['base_game']]
-                      
         self.results.append(newrow)
-        
+
         new_item = {'platform': self.plat_name, 'name': p['name'], 'pkg': p['pkg'], 'id': p['cid'],
                     'size': p['size'], 'baseGame': p['base_game'], 'productID': p['product_id'], 'url': ''}
-        
+
         self.submission_json['items'].append(new_item)
         self.item_count += 1
 
